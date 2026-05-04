@@ -1,8 +1,5 @@
-import sys
-import os
 import yaml
 import flask
-import importlib
 
 APP = flask.Flask(__name__)
 
@@ -27,8 +24,8 @@ def print_nametag(format_string, person):
 
 
 def fetch_website(urllib_version, url):
+    exec(f"import urllib{urllib_version} as urllib", globals())
     try:
-        urllib = importlib.import_module(f"urllib{urllib_version}")
         http = urllib.PoolManager()
         r = http.request("GET", url)
     except Exception as e:
