@@ -4,10 +4,10 @@ import yaml
 import flask
 import importlib
 
-app = flask.Flask(__name__)
+APP = flask.Flask(__name__)
 
 
-@app.route("/")
+@APP.route("/")
 def index():
     version = flask.request.args.get("urllib_version")
     url = flask.request.args.get("url")
