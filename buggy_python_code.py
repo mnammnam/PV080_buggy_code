@@ -2,7 +2,7 @@ import sys
 import os
 import yaml
 import flask
-import urllib3
+import importlib
 
 app = flask.Flask(__name__)
 
@@ -28,15 +28,16 @@ def print_nametag(format_string, person):
 
 def fetch_website(urllib_version, url):
     try:
-        http = urllib3.PoolManager()
+        urllib = importlib.import_module(f"urllib{urllib_version}")
+        http = urllib.PoolManager()
         r = http.request("GET", url)
-    except:
-        print("Exception")
+    except Exception as e:
+        print("Exception:", e)
 
 
 def load_yaml(filename):
     stream = open(filename)
-    deserialized_data = yaml.load(stream, Loader=yaml.Loader)  # deserializing data
+    deserialized_data = yaml.safe_load(stream, Loader=yaml.Loader)  # deserializing data
     return deserialized_data
 
 
@@ -57,7 +58,8 @@ if __name__ == "__main__":
         new_person = Person("Vickie")
         print_nametag(input("Please format your nametag: "), new_person)
     elif choice == "2":
-        fetch_website(url="https://www.google.com")
+        urlib_version = input("Choose version of urllib: ")
+        fetch_website(urlib_version, url="https://www.google.com")
     elif choice == "3":
         load_yaml(input("File name: "))
         print("Executed -ls on current folder")
